@@ -6,9 +6,21 @@
     android:layout_marginHorizontal="7dp"
     android:layout_marginVertical="4.5dp">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/bg_app_character_item"
+        app:layout_constraintDimensionRatio="160:210"
+
+        />
+
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="4dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
@@ -16,8 +28,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeColor="#BA0101"
-        app:strokeWidth="2dp">
+        app:strokeColor="@color/transparent"
+        >
 
         <!--        imvImage-->
         <ImageView

@@ -303,7 +303,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     override fun initActionBar() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
-            setTextActionBar(tvCenter, getString(R.string.my_pixel))
+            setTextActionBar(tvCenter, getString(R.string.my_work))
 
             // Select All button (btnActionBarRight) - resize to 24dp for select all icons
             val size24dp = (24 * resources.displayMetrics.density).toInt()
@@ -316,7 +316,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             btnActionBarRight.gone()
 
             // Delete All button - hidden initially, only shown in selection mode
-            btnActionBarNextRight.setImageResource(R.drawable.ic_delete_all)
+            btnActionBarNextRight.setImageResource(R.drawable.ic_delete_item)
             btnActionBarNextRight.gone()
         }
     }
@@ -605,17 +605,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         // Text selected
         textView.textSize = 16f
         textView.paint.shader = null
-        textView.post {
-            val h = textView.lineHeight.toFloat()
-            val shader = LinearGradient(
-                0f, 0f, 0f, h,
-                Color.parseColor("#FFFFFF"),
-                Color.parseColor("#FFFFFF"),
-                Shader.TileMode.CLAMP
-            )
-            textView.paint.shader = shader
-            textView.invalidate()
-        }
+        textView.setTextColor(Color.WHITE)
 
         // ❌ Không dùng background tab nữa
         focusImage.gone()
@@ -641,17 +631,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         // Text unselected
         textView.textSize = 16f
         textView.paint.shader = null
-        textView.post {
-            val h = textView.lineHeight.toFloat()
-            val shader = LinearGradient(
-                0f, 0f, 0f, h,
-                Color.parseColor("#01579B"),
-                Color.parseColor("#01579B"),
-                Shader.TileMode.CLAMP
-            )
-            textView.paint.shader = shader
-            textView.invalidate()
-        }
+        textView.setTextColor(Color.parseColor("#AB5BFF"))
 
         // ❌ Không dùng background tab nữa
         focusImage.gone()

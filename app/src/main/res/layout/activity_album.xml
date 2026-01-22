@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_app"
     tools:context=".ui.my_creation.MyCreationActivity">
 
     <!-- layoutActionBar -->
@@ -29,7 +30,6 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         app:layout_goneMarginTop="0dp"
-        android:background=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvType" />
     <!--    cvType-->
@@ -82,7 +82,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/selected_tab_album"
                     android:visibility="visible" />
 
                 <!--                tvSpace-->
@@ -91,9 +90,10 @@
                     style="@style/single_marquee"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pixelifysans_regular"
+                    android:fontFamily="@font/chewy_regular"
                     android:gravity="center"
-                    android:text="@string/my_pixel"
+                    android:layout_marginEnd="20dp"
+                    android:text="@string/my_pony"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -141,9 +141,10 @@
                     style="@style/single_marquee"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/pixelifysans_regular"
+                    android:fontFamily="@font/chewy_regular"
                     android:gravity="center"
                     android:text="@string/my_design"
+                    android:layout_marginStart="20dp"
                     android:textColor="@color/colorPrimary"
                     android:textSize="16sp" />
 

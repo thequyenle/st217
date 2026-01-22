@@ -10,18 +10,20 @@
         <!--        layoutMain-->
         <androidx.cardview.widget.CardView
             android:id="@+id/layoutMain"
-            android:layout_width="match_parent"
+            app:cardBackgroundColor="@color/transparent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="16dp"
-            app:cardBackgroundColor="@color/color_app"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:id="@+id/containerDialog"
+                android:layout_width="311dp"
+                android:layout_height="152dp"
                 android:gravity="center_horizontal"
+                android:background="@drawable/bg_dialog_delete_exit"
                 android:orientation="vertical">
 
                 <!--            ConstraintLayout bọc tvTitle (Top)-->
@@ -29,46 +31,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="#01579B"
-                        android:fontFamily="@font/pixelifysans_medium"
-                        android:gravity="center"
-                        android:paddingVertical="5dp"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <!--            tvTitle (Top)-->
+
                     <TextView
                         android:id="@+id/tvTitle"
                         android:layout_width="0dp"
                         android:layout_marginHorizontal="70dp"
                         android:layout_height="wrap_content"
                         android:background="@color/transparent"
-                        android:fontFamily="@font/pixelifysans_medium"
+                        android:fontFamily="@font/chewy_regular"
                         android:gravity="center"
+                        android:layout_marginTop="2dp"
                         android:paddingVertical="5dp"
                         android:text="@string/delete"
                         style="@style/single_marquee"
                         android:textColor="#FFFFFF"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
 
-                    <ImageView
-                        android:id="@+id/ic_dot"
-                        android:layout_width="35dp"
-                        android:layout_height="9dp"
-                        android:layout_marginStart="9dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:src="@drawable/dot_ic"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,45 +60,44 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
-                    android:fontFamily="@font/pixelifysans_regular"
+                    android:fontFamily="@font/roboto_regular"
                     android:gravity="center"
                     android:paddingHorizontal="24dp"
                     android:text="@string/are_you_sure_want_to_delete_this_item"
-                    android:textColor="#01579B"
+                    android:textColor="#FF008C"
                     android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="45dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="12dp"
                     android:layout_marginBottom="23dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <!--                    btnNo-->
+
+                    <!--                    btnYes-->
                     <TextView
                         android:id="@+id/btnNo"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_16_stroke_red_solid_white"
-                        android:fontFamily="@font/pixelifysans_regular"
+                        android:fontFamily="@font/roboto_regular"
                         android:gravity="center"
-                        android:paddingVertical="9dp"
+                        android:paddingVertical="6dp"
                         android:text="@string/no"
-                        android:textColor="#01579B"
+                        android:textColor="#FF008C"
                         android:textSize="16sp" />
 
-                    <!--                    btnYes-->
                     <TextView
                         android:id="@+id/btnYes"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_16_solid_red"
-                        android:fontFamily="@font/pixelifysans_regular"
+                        android:fontFamily="@font/roboto_regular"
                         android:gravity="center"
                         android:paddingVertical="9dp"
                         android:text="@string/yes"
@@ -129,21 +110,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <!--            tvTitle (Bottom)-->
-                    <TextView
-                        android:id="@+id/tvTitleBottom"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:background="#01579B"
-                        android:fontFamily="@font/pixelifysans_medium"
-                        android:gravity="center"
-                        android:paddingVertical="5dp"
-                        android:textColor="#FFFFFF"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
