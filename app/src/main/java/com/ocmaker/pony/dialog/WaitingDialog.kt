@@ -15,9 +15,7 @@ class WaitingDialog(val context: Activity) :
 
     override fun initView() {
         // Start loading animation for dot
-        binding.icDotLoading.setImageResource(R.drawable.dot_loading_animation)
-        val dotAnimation = binding.icDotLoading.drawable as? AnimationDrawable
-        dotAnimation?.start()
+
     }
 
     override fun initAction() {}

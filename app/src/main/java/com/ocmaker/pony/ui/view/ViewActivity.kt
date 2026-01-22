@@ -71,7 +71,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     private fun setupUI() {
         binding.apply {
             actionBar.apply {
-                setTextActionBar(tvCenter, getString(R.string.my_pixel))
+             //   setTextActionBar(tvCenter, getString(R.string.my_work))
                 //  setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
                 setImageActionBar(btnActionBarRight, R.drawable.ic_edit_view)
 
@@ -123,6 +123,8 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 
     override fun initActionBar() {
         binding.actionBar.apply {
+           // tvCenter.select()
+
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
         }
     }

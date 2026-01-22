@@ -13,6 +13,7 @@ import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.handleBackLeftToRight
 import com.ocmaker.pony.core.extensions.hideNavigation
 import com.ocmaker.pony.core.extensions.loadNativeCollabAds
+import com.ocmaker.pony.core.extensions.select
 import com.ocmaker.pony.core.extensions.setImageActionBar
 import com.ocmaker.pony.core.extensions.setTextActionBar
 import com.ocmaker.pony.core.extensions.showInterAll
@@ -41,6 +42,7 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
             showLoading()
         }
         initRcv()
+
         dataViewModel.ensureData(this)
     }
 
@@ -90,7 +92,8 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
                         this@ChooseCharacterActivity,
                         R.string.notification,
                         R.string.internet_required_for_more_characters,
-                        isError = true  // Shows only OK button
+                        isError = true,  // Shows only OK button
+                        dialogType = com.ocmaker.pony.dialog.DialogType.INTERNET
                     )
                     dialog.show()
                     dialog.onYesClick = {
@@ -155,7 +158,8 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
     override fun initActionBar() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
-            setTextActionBar(tvCenter, getString(R.string.category))
+            setTextActionBar(tvCenter, getString(R.string.pony_maker))
+            tvCenter.select()
         }
     }
 

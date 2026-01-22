@@ -62,6 +62,7 @@ import com.ocmaker.pony.data.model.draw.DrawableDraw
 import com.ocmaker.pony.databinding.ActivityAddCharacterBinding
 import com.ocmaker.pony.dialog.ChooseColorDialog
 import com.ocmaker.pony.dialog.DialogSpeech
+import com.ocmaker.pony.dialog.DialogType
 import com.ocmaker.pony.dialog.YesNoDialog
 import com.ocmaker.pony.listener.listenerdraw.OnDrawListener
 import com.ocmaker.pony.ui.add_character.adapter.BackgroundColorAdapter
@@ -711,7 +712,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
 
     private fun confirmReset() {
         viewModel.setIsFocusEditText(false)
-        val dialog = YesNoDialog(this, R.string.reset, R.string.change_your_whole_design_are_you_sure)
+        val dialog = YesNoDialog(this, R.string.reset, R.string.change_your_whole_design_are_you_sure, dialogType = DialogType.RESET)
         dialog.show()
 
         fun dismissDialog() {

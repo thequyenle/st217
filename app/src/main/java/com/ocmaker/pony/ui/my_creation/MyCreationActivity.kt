@@ -304,6 +304,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             setTextActionBar(tvCenter, getString(R.string.my_work))
+            tvCenter.select()
 
             // Select All button (btnActionBarRight) - resize to 24dp for select all icons
             val size24dp = (24 * resources.displayMetrics.density).toInt()

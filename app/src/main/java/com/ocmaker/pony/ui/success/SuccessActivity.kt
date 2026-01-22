@@ -110,6 +110,8 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
             imgCenter.gone()
             setImageActionBar(btnActionBarRight, R.drawable.ic_home_ss)
             btnActionBarNextRight.invisible()
+            tvCenter.select()
+
         }
     }
 

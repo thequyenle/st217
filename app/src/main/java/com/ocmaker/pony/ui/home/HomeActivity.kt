@@ -104,8 +104,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
     private fun updateText() {
         binding.apply {
             tv1.text = strings(R.string.character_maker)
-            tv2.text = strings(R.string.quick_maker)
-            tv3.text = strings(R.string.my_character)
+            tv2.text = strings(R.string.trending)
+            tv3.text = strings(R.string.my_work)
         }
     }
 

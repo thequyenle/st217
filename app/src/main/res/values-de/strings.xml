@@ -121,4 +121,7 @@
     <string name="pony_maker">Pony Maker</string>
     <string name="trending">Trending Custom</string>
     <string name="my_pony">My Pony</string>
+    <string name="do_you_want_to_exit">Do you want to exit?</string>
+    <string name="title_11">Diverse Character Style</string>
+    <string name="title_22">Create Your Own Avatar However You Like</string>
 </resources>

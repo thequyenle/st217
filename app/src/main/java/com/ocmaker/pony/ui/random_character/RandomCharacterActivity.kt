@@ -80,7 +80,7 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
     override fun initActionBar() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
-            setTextActionBar(tvCenter, getString(R.string.quick_maker_in))
+            setTextActionBar(tvCenter, getString(R.string.trending))
             tvCenter.isSelected =true
         }
     }
