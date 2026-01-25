@@ -103,7 +103,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
 
     private fun updateText() {
         binding.apply {
-            tv1.text = strings(R.string.character_maker)
+            tv1.text = strings(R.string.pony_maker)
             tv2.text = strings(R.string.trending)
             tv3.text = strings(R.string.my_work)
         }

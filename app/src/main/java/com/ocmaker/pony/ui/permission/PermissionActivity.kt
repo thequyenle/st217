@@ -1,7 +1,6 @@
 package com.ocmaker.pony.ui.permission
 
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -58,11 +57,11 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         val textRes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) R.string.to_access_13 else R.string.to_access
 
         binding.txtPer.text = TextUtils.concat(
-            createColoredText(R.string.allow, Color.parseColor("#470092")),
+            createColoredText(R.string.allow, R.color.purple_text),
             " ",
-            createColoredText(R.string.app_name, Color.parseColor("#470092")),
+            createColoredText(R.string.app_name, R.color.purple_text),
             " ",
-            createColoredText(textRes, COlor.parseColor("#470092"))
+            createColoredText(textRes, R.color.purple_text)
         )
     }
 
@@ -176,7 +175,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
     private fun createColoredText(
         @androidx.annotation.StringRes textRes: Int,
         @androidx.annotation.ColorRes colorRes: Int,
-        font: Int = R.font.londrina_solid_regular
+        font: Int = R.font.roboto_medium
     ) = StringHelper.changeColor(this, getString(textRes), colorRes, font)
 
     private fun handleContinue() {

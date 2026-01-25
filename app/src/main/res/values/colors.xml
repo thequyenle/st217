@@ -43,4 +43,5 @@
     <color name="native_text_color">#FFFFFF</color>
     <color name="native_text_color_black">#000000</color>
     <color name="dark">#000000</color>
+    <color name="purple_text">#470092</color>
 </resources>

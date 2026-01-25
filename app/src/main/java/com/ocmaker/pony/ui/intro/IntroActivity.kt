@@ -23,9 +23,11 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
         return ActivityIntroBinding.inflate(LayoutInflater.from(this))
     }
 
+
     override fun initView() {
         initVpg()
     }
+
 
     override fun viewListener() {
         binding.btnNext.tap { handleNext() }

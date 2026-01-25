@@ -21,6 +21,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private val dataViewModel: DataViewModel by viewModels()
     var interCallBack: InterCallback? = null
 
+    private val MIN_SPLASH_MS = 3000L
+    private var minTimePassed = false
+    private var dataReady = false
+    private var triggered = false
+
     override fun setViewBinding(): ActivitySplashBinding {
         return ActivitySplashBinding.inflate(LayoutInflater.from(this))
     }
@@ -53,6 +58,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             }
         }
         dataViewModel.ensureData(this)
+
+        lifecycleScope.launch {
+            kotlinx.coroutines.delay(MIN_SPLASH_MS)
+            minTimePassed = true
+            tryProceed()
+        }
     }
 
     override fun dataObservable() {
@@ -63,19 +74,28 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
                         when(dataAPI){
                             HandleState.LOADING -> {}
                             else -> {
-                                Admob.getInstance().loadSplashInterAds(
-                                    this@SplashActivity,
-                                    getString(R.string.inter_splash),
-                                    30000,
-                                    2000,
-                                    interCallBack
-                                )
+                                dataReady = true
+                                tryProceed()
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun tryProceed() {
+        if (triggered) return
+        if (!minTimePassed || !dataReady) return
+
+        triggered = true
+        Admob.getInstance().loadSplashInterAds(
+            this@SplashActivity,
+            getString(R.string.inter_splash),
+            30000,
+            2000,
+            interCallBack
+        )
     }
 
     override fun viewListener() {

@@ -1,7 +1,7 @@
 <resources>
 
     <string name="go_to_setting_message">The app needs this permission</string>
-    <string name="settings">Settings</string>
+    <string name="settings">Setting</string>
     <string name="this_action_can_contain_ads">This action can contain ads</string>
     <string name="not_select_lang">Please select a language</string>
     <string name="next">Next</string>
@@ -21,9 +21,9 @@
     <string name="to_access">to access photos on your device</string>
     <string name="to_access_13">to access notification on your device</string>
 
-    <string name="rate_us">Rate Us</string>
-    <string name="share_app">Share App</string>
-    <string name="privacy_policy"><![CDATA[Privacy & Policy]]></string>
+    <string name="rate_us">Rate us</string>
+    <string name="share_app">Share app</string>
+    <string name="privacy_policy"><![CDATA[Privacy & policy]]></string>
 
     <string name="zero_star_title">Do you like the app?</string>
     <string name="zero_star">Let us know your experience</string>
@@ -106,7 +106,6 @@
     <string name="choose_color">Choose Color</string>
     <string name="done">Done</string>
     <string name="null_edt">Please enter text</string>
-    <string name="my_pixel">My Pixel</string>
     <string name="input_text">Input text</string>
     <string name="hello_world">Type your content...</string>
     <string name="no_item_desgin">No current history</string>
@@ -114,7 +113,6 @@
     <string name="quick_maker_in">Quick mix</string>
     <string name="exit_add">Exit your background</string>
     <string name="exit_bg">Exit your background</string>
-    <string name="exit_cus">Exit your customize</string>
     <string name="loading">Loading</string>
     <string name="internet_required_for_more_characters">Internet required for more characters</string>
     <string name="music">Music</string>
@@ -124,5 +122,5 @@
     <string name="my_pony">My Pony</string>
     <string name="do_you_want_to_exit">Do you want to exit?</string>
     <string name="title_11">Diverse Character Style</string>
-    <string name="title_22">Create Your Own Avatar However You Like</string>
+    <string name="title_22">Create Your Own Avatar \nHowever You Like</string>
 </resources>

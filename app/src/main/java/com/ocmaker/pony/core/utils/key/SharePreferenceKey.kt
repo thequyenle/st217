@@ -7,4 +7,5 @@ object SharePreferenceKey {
     const val KEY_LANGUAGE = "language_key"
     const val RATE_KEY = "rate"
     const val COUNT_BACK_KEY = "back_count"
+    const val MUSIC_KEY = "music_enabled"
 }

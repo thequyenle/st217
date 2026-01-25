@@ -11,6 +11,7 @@ import com.ocmaker.pony.core.utils.key.SharePreferenceKey.COUNT_BACK_KEY
 import com.ocmaker.pony.core.utils.key.SharePreferenceKey.FIRST_LANG_KEY
 import com.ocmaker.pony.core.utils.key.SharePreferenceKey.FIRST_PERMISSION_KEY
 import com.ocmaker.pony.core.utils.key.SharePreferenceKey.KEY_LANGUAGE
+import com.ocmaker.pony.core.utils.key.SharePreferenceKey.MUSIC_KEY
 import com.ocmaker.pony.core.utils.key.SharePreferenceKey.RATE_KEY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -117,6 +118,17 @@ class SharePreferenceHelper(val context: Context) {
         val editor = preferences.edit()
         val json = Gson().toJson(count)
         editor.putString(QUANTITY_UNZIPPED, json)
+        editor.apply()
+    }
+
+    // Music
+    fun isMusicEnabled(): Boolean {
+        return preferences.getBoolean(MUSIC_KEY, true) // Default: true (bật nhạc lần đầu)
+    }
+
+    fun setMusicEnabled(enabled: Boolean) {
+        val editor = preferences.edit()
+        editor.putBoolean(MUSIC_KEY, enabled)
         editor.apply()
     }
 }

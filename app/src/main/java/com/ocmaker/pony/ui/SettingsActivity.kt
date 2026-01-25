@@ -17,6 +17,7 @@ import com.ocmaker.pony.core.utils.state.RateState
 import com.ocmaker.pony.databinding.ActivitySettingsBinding
 import com.ocmaker.pony.ui.language.LanguageActivity
 import com.ocmaker.pony.core.extensions.tap
+import com.ocmaker.pony.core.helper.MusicHelper
 import com.ocmaker.pony.core.helper.RateHelper
 import kotlin.jvm.java
 
@@ -28,11 +29,34 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>() {
     override fun initView() {
         binding.tvMusic.select()
         initRate()
+        initMusic()
+    }
+
+    private fun initMusic() {
+        updateMusicUI(sharePreference.isMusicEnabled())
+    }
+
+    private fun updateMusicUI(isEnabled: Boolean) {
+        binding.btnMusic.setImageResource(
+            if (isEnabled) R.drawable.ic_sw_on else R.drawable.ic_sw_off
+        )
+    }
+
+    private fun toggleMusic() {
+        val isEnabled = !sharePreference.isMusicEnabled()
+        sharePreference.setMusicEnabled(isEnabled)
+        updateMusicUI(isEnabled)
+        if (isEnabled) {
+            MusicHelper.play()
+        } else {
+            MusicHelper.pause()
+        }
     }
 
     override fun viewListener() {
         binding.apply {
             actionBar.btnActionBarLeft.tap { handleBackLeftToRight() }
+            layoutMusic.tap { toggleMusic() }
             btnLang.tap { startIntentRightToLeft(LanguageActivity::class.java, IntentKey.INTENT_KEY) }
             btnShareApp.tap(1500) { shareApp() }
             btnRate.tap {
