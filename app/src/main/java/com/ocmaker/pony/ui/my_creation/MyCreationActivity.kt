@@ -72,6 +72,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     private var myDesignFragment: MyDesignFragment? = null
     private var isInSelectionMode = false
     private var isAllSelected = false
+    private var pendingDownloadList: ArrayList<String>? = null
 
     override fun setViewBinding(): ActivityAlbumBinding {
         return ActivityAlbumBinding.inflate(LayoutInflater.from(this))
@@ -236,7 +237,30 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     private fun handleDownloadFromCurrentFragment() {
         val selectedPaths = getSelectedPathsFromCurrentFragment()
-        handleDownload(selectedPaths)
+        if (selectedPaths.isEmpty()) {
+            showToast(R.string.please_select_an_image)
+            return
+        }
+        checkStoragePermissionForDownload(selectedPaths)
+    }
+
+    private fun checkStoragePermissionForDownload(list: ArrayList<String>) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Android 10+ không cần quyền WRITE_EXTERNAL_STORAGE
+            handleDownload(list)
+        } else {
+            // Android 8-9 cần check quyền
+            val perms = permissionViewModel.getStoragePermissions()
+            if (checkPermissions(perms)) {
+                handleDownload(list)
+            } else if (permissionViewModel.needGoToSettings(sharePreference, true)) {
+                goToSettings()
+            } else {
+                // Lưu lại list để download sau khi được cấp quyền
+                pendingDownloadList = list
+                requestPermission(perms, RequestKey.STORAGE_PERMISSION_CODE)
+            }
+        }
     }
 
     private fun handleSelectAllFromCurrentFragment() {
@@ -340,8 +364,14 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 permissionViewModel.updateStorageGranted(sharePreference, true)
                 showToast(R.string.granted_storage)
+                // Thực hiện download sau khi được cấp quyền
+                pendingDownloadList?.let { list ->
+                    handleDownload(list)
+                    pendingDownloadList = null
+                }
             } else {
                 permissionViewModel.updateStorageGranted(sharePreference, false)
+                pendingDownloadList = null
             }
         }
     }
@@ -401,11 +431,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         }
     }
 
-    fun handleDownload(list: ArrayList<String>) {
-        if (list.isEmpty()) {
-            showToast(R.string.please_select_an_image)
-            return
-        }
+    private fun handleDownload(list: ArrayList<String>) {
         viewModel.downloadFiles(this, list)
     }
 
