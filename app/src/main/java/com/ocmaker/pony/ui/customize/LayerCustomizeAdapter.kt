@@ -1,9 +1,11 @@
 package com.ocmaker.pony.ui.customize
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.Outline
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -29,6 +31,16 @@ class LayerCustomizeAdapter(val context: Context) : ListAdapter<ItemNavCustomMod
             binding.apply {
                 val shimmerDrawable = ShimmerDrawable().apply {
                     setShimmer(DataLocal.shimmer)
+                    startShimmer()
+                }
+
+                // Apply rounded corners using ViewOutlineProvider (40dp radius like ShapeAppearanceOverlay.Pony.Rounded20)
+                val cornerRadius = 8f * context.resources.displayMetrics.density
+                imvImage.clipToOutline = true
+                imvImage.outlineProvider = object : ViewOutlineProvider() {
+                    override fun getOutline(view: View, outline: Outline) {
+                        outline.setRoundRect(0, 0, view.width, view.height, cornerRadius)
+                    }
                 }
 
                 if (item.isSelected) {

@@ -11,16 +11,20 @@ import android.view.ViewOutlineProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.ironsource.adqualitysdk.sdk.i.ct
 import com.ocmaker.pony.R
+import android.graphics.drawable.Drawable
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.facebook.shimmer.ShimmerDrawable
 import com.ocmaker.pony.core.extensions.dp
-import com.ocmaker.pony.core.extensions.loadImage
 import com.ocmaker.pony.core.extensions.setMargins
 import com.ocmaker.pony.core.extensions.tap
-import com.ocmaker.pony.core.helper.UnitHelper
+import com.ocmaker.pony.core.utils.DataLocal
 import com.ocmaker.pony.data.model.custom.NavigationModel
 import com.ocmaker.pony.databinding.ItemBottomNavigationBinding
-import kotlin.math.roundToInt
 
 class BottomNavigationCustomizeAdapter(private val context: Context) :
     ListAdapter<NavigationModel, BottomNavigationCustomizeAdapter.BottomNavViewHolder>(DiffCallback) {
@@ -35,12 +39,27 @@ class BottomNavigationCustomizeAdapter(private val context: Context) :
 
         fun bind(item: NavigationModel, position: Int) = with(binding) {
 
-            // Apply 8dp rounded corners BEFORE loading image (so shimmer is also rounded)
-            val cornerRadiusPx = UnitHelper.dpToPx(context, 8f)
+            // Apply circular clipping to cvContent (so shimmer/image fills circle and doesn't overflow)
+            cvContent.clipToOutline = true
+            cvContent.outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setOval(0, 0, view.width, view.height)
+                }
+            }
+
+            // Apply circular clipping to imvImage (shimmer layer - fills full circle)
             imvImage.clipToOutline = true
             imvImage.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
-                    outline.setRoundRect(0, 0, view.width, view.height, cornerRadiusPx)
+                    outline.setOval(0, 0, view.width, view.height)
+                }
+            }
+
+            // Apply circular clipping to imvImageBG (actual image layer - with margin)
+            imvImageBG.clipToOutline = true
+            imvImageBG.outlineProvider = object : ViewOutlineProvider() {
+                override fun getOutline(view: View, outline: Outline) {
+                    outline.setOval(0, 0, view.width, view.height)
                 }
             }
 
@@ -54,29 +73,56 @@ class BottomNavigationCustomizeAdapter(private val context: Context) :
             cvContent.animate().cancel()
 
             if (item.isSelected) {
-              //  vFocus.setBackgroundResource(R.drawable.bg_bottom_navi)
                 imvImage.setBackgroundColor(Color.TRANSPARENT)
-                cvContent.strokeColor = Color.TRANSPARENT
-                cvContent.setBackgroundResource(R.drawable.bg_select_navi)
-                // Use consistent margin to avoid layout shift
-                //binding.main.setMargins(0, 5.dp(context), 8.dp(context), 7.dp(context))
+                cvContent.setBackgroundResource(R.drawable.bg_select_navi_shape)
 
                 // Use translationY for visual effect without affecting layout
-                cvContent.translationZ = 50f
+                cvContent.translationZ = 0f
                 cvContent.translationY = -offset
 
             } else {
                 // Use same bottom margin as selected to maintain consistent height
                 binding.main.setMargins(0, 15.dp(context), 8.dp(context), 15.dp(context))
 
-                //   vFocus.setBackgroundColor(context.getColor(android.R.color.transparent))
                 imvImage.setBackgroundColor(Color.TRANSPARENT)
-                cvContent.setBackgroundResource(R.drawable.bg_uslt_navi)
+                cvContent.setBackgroundResource(R.drawable.bg_uslt_navi_shape)
                 cvContent.translationZ = 0f
                 cvContent.translationY = 0f
             }
 
-            loadImage(root, item.imageNavigation, imvImage)
+            // Layer 1: imvImage - shimmer fills full circle (0dp margin)
+            val shimmerDrawable = ShimmerDrawable().apply {
+                setShimmer(DataLocal.shimmer)
+            }
+            imvImage.setImageDrawable(shimmerDrawable)
+            imvImage.visibility = View.VISIBLE
+
+            // Layer 2: imvImageBG - actual image with margin (2dp margin)
+            Glide.with(root)
+                .load(item.imageNavigation)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        // Hide shimmer when image loads successfully
+                        imvImage.visibility = View.GONE
+                        return false
+                    }
+                })
+                .into(imvImageBG)
 
             root.tap { onItemClick.invoke(position) }
         }

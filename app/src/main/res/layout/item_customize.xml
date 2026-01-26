@@ -32,17 +32,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-
         <!--                    imvImage-->
         <ImageView
             android:id="@+id/imvImage"
-            android:layout_margin="7dp"
             android:layout_width="match_parent"
+            android:layout_marginTop="2dp"
             android:layout_height="match_parent"
-            tools:src="1"
+            android:layout_marginHorizontal="4.7dp"
+            android:layout_marginBottom="6.5dp"
             android:scaleType="centerCrop"
-            android:clipToOutline="true" />
+            android:clipToOutline="true"
+            tools:src="@color/red_BA" />
 
         <!--            btnNone-->
         <ImageView
@@ -51,10 +51,9 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="7dp"
             android:translationY="-2dp"
-            android:layout_marginHorizontal="7dp"
-            android:layout_marginBottom="7dp"
+
+            android:layout_margin="7dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_none"
             android:visibility="gone"
@@ -66,9 +65,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:layout_marginHorizontal="7dp"
-            android:layout_marginBottom="7dp"
+            android:layout_margin="7dp"
             android:focusable="true"
+            android:translationY="-2dp"
             app:tint="#AB5BFF"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_random_layer"
