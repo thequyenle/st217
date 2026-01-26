@@ -39,7 +39,7 @@ class LayerCustomizeAdapter(val context: Context) : ListAdapter<ItemNavCustomMod
                     vFocus.gone()
 
                     cardLayerItem.setBackgroundResource(R.drawable.layer_slt)
-                   // vFocus.setBackgroundResource(R.drawable.bg_10_stroke_yellow)
+                    // vFocus.setBackgroundResource(R.drawable.bg_10_stroke_yellow)
                 } else {
                     // Reset to normal state
                     root.translationZ = 0f

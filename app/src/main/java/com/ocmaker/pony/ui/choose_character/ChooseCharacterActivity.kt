@@ -136,9 +136,10 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
                         // Show No Internet dialog
                         val dialog = com.ocmaker.pony.dialog.YesNoDialog(
                             this@ChooseCharacterActivity,
-                            R.string.error,
+                            R.string.no_internet,
                             R.string.please_check_your_internet,
-                            isError = true
+                            isError = true,
+                            dialogType = com.ocmaker.pony.dialog.DialogType.INTERNET
                         )
                         dialog.show()
                         dialog.onYesClick = {

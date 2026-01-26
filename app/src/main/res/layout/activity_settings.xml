@@ -60,9 +60,9 @@
             android:id="@+id/btnMusic"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:layout_width="96dp"
-            android:scaleType="fitXY"
-            android:layout_height="41dp"
+            android:layout_width="97dp"
+            android:scaleType="centerInside"
+            android:layout_height="43dp"
             android:src="@drawable/ic_sw_on"
             />
         

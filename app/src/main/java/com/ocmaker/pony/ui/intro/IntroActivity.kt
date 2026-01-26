@@ -78,6 +78,8 @@ class IntroActivity : BaseActivity<ActivityIntroBinding>() {
     @SuppressLint("MissingSuperCall", "GestureBackNavigation")
     override fun onBackPressed() { exitProcess(0) }
 
+    override fun shouldPlayBackgroundMusic(): Boolean = false
+
 //    override fun initAds() {
 //        Admob.getInstance().loadNativeAd(this, getString(R.string.native_intro), binding.nativeAds, R.layout.ads_native_medium_btn_bottom)
 //    }

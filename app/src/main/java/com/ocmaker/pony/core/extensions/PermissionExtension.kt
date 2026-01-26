@@ -13,6 +13,7 @@ import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import com.ocmaker.pony.R
 import com.ocmaker.pony.core.helper.LanguageHelper
+import com.ocmaker.pony.dialog.DialogType
 import com.ocmaker.pony.dialog.YesNoDialog
 
 
@@ -27,7 +28,13 @@ fun Activity.requestPermission(permissions: Array<String>, requestCode: Int) {
 }
 
 fun Activity.goToSettings() {
-    val dialog = YesNoDialog(this, R.string.permission, R.string.go_to_setting_message)
+    val dialog = YesNoDialog(
+        context = this,
+        title = R.string.permission,
+        description = R.string.go_to_setting_message,
+        isError = false,
+        dialogType = DialogType.PERMISSION
+    )
     LanguageHelper.setLocale(this)
     dialog.show()
 

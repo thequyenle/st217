@@ -18,6 +18,7 @@
     <string name="storage">Storage</string>
     <string name="continue_per">Continue</string>
     <string name="notification">Notification</string>
+    <string name="no_internet">No Internet</string>
     <string name="granted_notification">Notification permission granted</string>
     <string name="granted_storage">Storage permission granted</string>
     <string name="allow">Allow</string>

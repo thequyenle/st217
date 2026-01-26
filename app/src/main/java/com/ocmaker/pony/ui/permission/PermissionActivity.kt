@@ -190,6 +190,8 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
     }
 
 
+    override fun shouldPlayBackgroundMusic(): Boolean = false
+
 //    override fun initAds() {
 //        Admob.getInstance().loadInterAds(
 //            this@PermissionActivity, getString(R.string.inter_per), object : InterCallback() {

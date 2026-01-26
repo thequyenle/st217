@@ -21,7 +21,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private val dataViewModel: DataViewModel by viewModels()
     var interCallBack: InterCallback? = null
 
-    private val MIN_SPLASH_MS = 3000L
+    private val MIN_SPLASH_MS = 0L  // Reduced from 3000ms to 1500ms for faster startup
     private var minTimePassed = false
     private var dataReady = false
     private var triggered = false
@@ -70,15 +70,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         lifecycleScope.launch {
             dataViewModel.allData.collect { dataList ->
                 if (dataList.isNotEmpty()){
-                    dataViewModel.getAllParts(this@SplashActivity).collect { dataAPI ->
-                        when(dataAPI){
-                            HandleState.LOADING -> {}
-                            else -> {
-                                dataReady = true
-                                tryProceed()
-                            }
-                        }
-                    }
+                    // Data is ready, no need to call API again
+                    // (API already called in saveAndReadData if needed)
+                    dataReady = true
+                    tryProceed()
                 }
             }
         }
@@ -112,4 +107,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         super.onResume()
         Admob.getInstance().onCheckShowSplashWhenFail(this, interCallBack, 1000)
     }
+
+    override fun shouldPlayBackgroundMusic(): Boolean = false
 }

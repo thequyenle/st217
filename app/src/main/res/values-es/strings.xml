@@ -15,6 +15,7 @@
     <string name="storage">Almacenamiento</string>
     <string name="continue_per">Continuar</string>
     <string name="notification">Notificación</string>
+    <string name="no_internet">Sin Internet</string>
     <string name="granted_notification">Permiso de notificaciones concedido</string>
     <string name="granted_storage">Permiso de almacenamiento concedido</string>
     <string name="allow">Permitir</string>

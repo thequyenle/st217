@@ -16,6 +16,7 @@ import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
 import com.ocmaker.pony.core.extensions.goToSettings
 import com.ocmaker.pony.core.extensions.gone
+import com.ocmaker.pony.core.extensions.handleBackLeftToRight
 import com.ocmaker.pony.core.extensions.invisible
 import com.ocmaker.pony.core.extensions.loadImage
 import com.ocmaker.pony.core.extensions.requestPermission
@@ -75,6 +76,9 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
         }
     }
 
+    private fun handleBack() {
+        handleBackLeftToRight()
+    }
     override fun viewListener() {
         binding.apply {
             actionBar.apply {
@@ -83,6 +87,8 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
                         startIntentWithClearTop(HomeActivity::class.java)
                     }
                 }
+                btnActionBarLeft.tap { showInterAll { handleBack() } }
+
             }
 
             // My Album button
@@ -108,7 +114,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             tvCenter.visible()
             imgCenter.gone()
-            setImageActionBar(btnActionBarRight, R.drawable.ic_home_ss)
+                setImageActionBar(btnActionBarRight, R.drawable.ic_home_ss)
             btnActionBarNextRight.invisible()
             tvCenter.select()
 
@@ -163,8 +169,6 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
 
     @android.annotation.SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        showInterAll {
-            startIntentWithClearTop(HomeActivity::class.java)
-        }
+        handleBackLeftToRight()
     }
 }

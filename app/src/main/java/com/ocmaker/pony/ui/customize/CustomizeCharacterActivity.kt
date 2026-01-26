@@ -43,6 +43,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.get
 import kotlin.jvm.java
 
 class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
@@ -82,8 +83,9 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                         viewModel.positionSelected = intent.getIntExtra(IntentKey.INTENT_KEY, 0)
                         viewModel.statusFrom =
                             intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
-                        viewModel.setDataCustomize(list[viewModel.positionSelected])
-                        viewModel.setIsDataAPI(list[viewModel.positionSelected].isFromAPI)
+                        val safePosition = viewModel.positionSelected.coerceIn(0, list.size - 1)
+                        viewModel.setDataCustomize(list[safePosition])
+                        viewModel.setIsDataAPI(list[safePosition].isFromAPI)
                         initData()
                     }
                 }
@@ -480,7 +482,15 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             viewModel.setPositionNavSelected(positionBottomNavigation)
             viewModel.setPositionCustom(viewModel.dataCustomize.value!!.layerList[positionBottomNavigation].positionCustom)
             viewModel.setClickBottomNavigation(positionBottomNavigation)
-            withContext(Dispatchers.Main) { showInterAll { checkStatusColor() } }
+            withContext(Dispatchers.Main) {
+                // Scroll color list to selected item when tab changes
+                if (viewModel.colorItemNavList[viewModel.positionNavSelected].isNotEmpty()) {
+                    binding.rcvColor.smoothScrollToPosition(
+                        viewModel.colorItemNavList[viewModel.positionNavSelected].indexOfFirst { it.isSelected }
+                    )
+                }
+                showInterAll { checkStatusColor() }
+            }
         }
     }
 

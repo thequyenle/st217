@@ -32,14 +32,28 @@ import com.ocmaker.pony.listener.listenerdraw.FlipEvent
 import com.ocmaker.pony.listener.listenerdraw.OnDrawListener
 import com.ocmaker.pony.listener.listenerdraw.ZoomEvent
 import java.util.Collections
+import kotlin.compareTo
+import kotlin.div
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.text.compareTo
+import kotlin.text.toDouble
+import kotlin.times
 
 
 @SuppressLint("CustomViewStyleable")
 open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     FrameLayout(context, attrs, defStyleAttr) {
+
+    companion object {
+        private const val MIN_SCALE_PERCENT = 0.6f
+    }
+
+    private val initialScaleMap = HashMap<DrawableDraw, Float>()
+    private var lastCheckedScale = -1f
+    private var lastScaleValid = true
 
     @IntDef(
         DrawKey.NONE, DrawKey.DRAG, DrawKey.ZOOM_WITH_TWO_FINGER, DrawKey.ICON, DrawKey.CLICK
@@ -253,10 +267,15 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     fun remove(draw: Draw?): Boolean {
         if (drawList.contains(draw)) {
-            drawList.remove(draw)
-            OnDrawListener?.onDeletedDraw(draw!!)
-            if (handlingDraw == draw) {
-                handlingDraw = null
+            if (!draw!!.isCharacter) {
+                drawList.remove(draw)
+                if (draw is DrawableDraw) {
+                    initialScaleMap.remove(draw)
+                }
+                OnDrawListener?.onDeletedDraw(draw!!)
+                if (handlingDraw == draw) {
+                    handlingDraw = null
+                }
             }
 
             // save undo khi xóa xong
@@ -297,6 +316,9 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     fun fillData(draw: ArrayList<DrawableDraw>) {
         this.drawList.clear()
         this.drawList.addAll(draw)
+        for (d in draw) {
+            initialScaleMap[d] = d.currentScale
+        }
         saveDrawState()
         postInvalidate()
     }
@@ -454,6 +476,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     fun removeAllDraw() {
         drawList.clear()
+        initialScaleMap.clear()
         handlingDraw?.release()
         handlingDraw = null
         invalidate()
@@ -552,8 +575,8 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     private fun addDrawImmediately(draw: DrawableDraw, position: Int) {
         setDrawPosition(draw, position)
 
-        val widthScaleFactor = width.toFloat() / draw.drawable.intrinsicWidth
-        val heightScaleFactor = height.toFloat() / draw.drawable.intrinsicHeight
+        val widthScaleFactor = width.toFloat() / draw.drawable.intrinsicWidth * 0.7f
+        val heightScaleFactor = height.toFloat() / draw.drawable.intrinsicHeight * 0.7f
         val scaleFactor = if (widthScaleFactor > heightScaleFactor) heightScaleFactor else widthScaleFactor
 
         if (draw.isText) {
@@ -561,11 +584,10 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         } else if (draw.isCharacter) {
             draw.getMatrix().postScale(scaleFactor / 1.2f, scaleFactor / 1.2f, width / 2f, height / 2f)
         } else {
-            draw.getMatrix().postScale(scaleFactor / 3f, scaleFactor / 3f, width / 2f, height / 2f)
+            draw.getMatrix().postScale(scaleFactor / 2f, scaleFactor / 2f, width / 2f, height / 2f)
         }
 
-
-
+        initialScaleMap[draw] = draw.currentScale
         handlingDraw = draw
         drawList.add(draw)
 
@@ -737,7 +759,10 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
                         newDistance / oldDistance, newDistance / oldDistance, midPoint.x, midPoint.y
                     )
                     moveMatrix.postRotate(newRotation - oldRotation, midPoint.x, midPoint.y)
-                    handlingDraw!!.setMatrix(moveMatrix)
+
+                    if (isScaleValid(handlingDraw!!, moveMatrix)) {
+                        handlingDraw!!.setMatrix(moveMatrix)
+                    }
                 }
                 Log.d("Action: ZOOM_WITH_TWO_FINGER", "ZOOM_WITH_TWO_FINGER")
             }
@@ -755,37 +780,16 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         if (draw != null) {
             val newDistance = calcDistance(midPoint.x, midPoint.y, event.x, event.y)
             val newRotation = calcRotation(midPoint.x, midPoint.y, event.x, event.y)
+
             Log.e("HVV1312", "OK ???: $midPoint.x va ${event.x}")
-
-            // Calculate scale factor
-            var scaleFactor = newDistance / oldDistance
-
-            // Get current scale from matrix
-            val values = FloatArray(9)
-            downMatrix.getValues(values)
-            val currentScaleX = values[Matrix.MSCALE_X]
-            val currentScaleY = values[Matrix.MSCALE_Y]
-            val currentScale = Math.abs(currentScaleX)
-
-            // Calculate new scale
-            val newScale = currentScale * scaleFactor
-
-            // Limit scale between MIN_SCALE and MAX_SCALE
-            val minScale = 0.4f
-            val maxScale = 3.0f
-
-            if (newScale < minScale) {
-                scaleFactor = minScale / currentScale
-            } else if (newScale > maxScale) {
-                scaleFactor = maxScale / currentScale
-            }
-
             moveMatrix.set(downMatrix)
             moveMatrix.postScale(
-                scaleFactor, scaleFactor, midPoint.x, midPoint.y
+                newDistance / oldDistance, newDistance / oldDistance, midPoint.x, midPoint.y
             )
             moveMatrix.postRotate(newRotation - oldRotation, midPoint.x, midPoint.y)
-            draw.setMatrix(moveMatrix)
+            if (draw is DrawableDraw && isScaleValid(draw, moveMatrix)) {
+                draw.setMatrix(moveMatrix)
+            }
         }
     }
 
@@ -992,7 +996,6 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         iconList.add(zoomIcon)
         iconList.add(editIcon)
     }
-
     private fun flip(draw: Draw?, direction: Int) {
         if (draw != null) {
             if (!draw.isLock) {
@@ -1054,6 +1057,33 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
         OnDrawListener?.onReplace(sticker)
         invalidate()
+    }
+
+    private fun isScaleValid(draw: Draw, matrix: Matrix): Boolean {
+        val initialScale = initialScaleMap[draw] ?: return true
+        val minAllowedScale = initialScale * MIN_SCALE_PERCENT
+
+        // Calculate current scale from matrix
+        val values = FloatArray(9)
+        matrix.getValues(values)
+        val scaleX = values[Matrix.MSCALE_X]
+        val skewY = values[Matrix.MSKEW_Y]
+        val currentScale = sqrt(scaleX * scaleX + skewY * skewY)
+
+        // Cache result if scale doesn't change much
+        if (abs(currentScale - lastCheckedScale) < 0.001f) {
+            return lastScaleValid
+        }
+
+        lastCheckedScale = currentScale
+        lastScaleValid = currentScale >= minAllowedScale
+        return lastScaleValid
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        // Clear all pending tasks
+        handler?.removeCallbacksAndMessages(null)
     }
 }
 

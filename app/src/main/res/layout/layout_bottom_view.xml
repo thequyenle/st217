@@ -31,6 +31,8 @@
                 app:cardCornerRadius="102dp"
                 app:cardElevation="0dp"
                 app:strokeColor="@color/transparent"
+                app:cardBackgroundColor="@color/transparent"
+
                 app:layout_constraintBottom_toBottomOf="@+id/lnlInLeft"
                 app:layout_constraintEnd_toEndOf="@+id/lnlInLeft"
                 app:layout_constraintStart_toStartOf="@+id/lnlInLeft"
@@ -86,7 +88,9 @@
                 android:scaleType="fitXY"
                 app:cardCornerRadius="102dp"
                 app:cardElevation="0dp"
-                app:strokeColor="@color/white"
+                app:cardBackgroundColor="@color/transparent"
+
+                app:strokeColor="@color/transparent"
                 app:layout_constraintBottom_toBottomOf="@+id/lnlInRight"
                 app:layout_constraintEnd_toEndOf="@+id/lnlInRight"
                 app:layout_constraintStart_toStartOf="@+id/lnlInRight"

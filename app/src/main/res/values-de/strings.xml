@@ -15,6 +15,7 @@
     <string name="storage">Speicher</string>
     <string name="continue_per">Fortfahren</string>
     <string name="notification">Benachrichtigung</string>
+    <string name="no_internet">Kein Internet</string>
     <string name="granted_notification">Benachrichtigungsberechtigung erteilt</string>
     <string name="granted_storage">Speicherberechtigung erteilt</string>
     <string name="allow">Erlauben</string>

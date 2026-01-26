@@ -65,6 +65,7 @@
         android:layout_marginHorizontal="20dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/flActionBar">
 
@@ -74,11 +75,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
-
-        <ImageView
-            android:id="@+id/imvCharacter"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
         <!--        drawView-->
         <com.ocmaker.pony.core.custom.drawview.DrawView
             android:id="@+id/drawView"

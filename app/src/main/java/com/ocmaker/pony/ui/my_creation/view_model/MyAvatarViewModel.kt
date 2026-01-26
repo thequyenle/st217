@@ -119,9 +119,10 @@ class MyAvatarViewModel : ViewModel() {
                 // Show No Internet dialog
                 val dialog = com.ocmaker.pony.dialog.YesNoDialog(
                     context,
-                    com.ocmaker.pony.R.string.error,
+                    com.ocmaker.pony.R.string.no_internet,
                     com.ocmaker.pony.R.string.please_check_your_internet,
-                    isError = true
+                    isError = true,
+                    dialogType = com.ocmaker.pony.dialog.DialogType.INTERNET
                 )
                 dialog.show()
                 dialog.onYesClick = {

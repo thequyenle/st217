@@ -15,7 +15,8 @@ enum class DialogType {
     DELETE_EXIT,
     RESET,
     LOADING,
-    INTERNET
+    INTERNET,
+    PERMISSION
 }
 
 class YesNoDialog(
@@ -49,7 +50,9 @@ class YesNoDialog(
             DialogType.RESET -> R.drawable.bg_dialog_reset
             DialogType.LOADING -> R.drawable.bg_dialog_loading
             DialogType.INTERNET -> R.drawable.bg_dialog_internet
+            DialogType.PERMISSION -> R.drawable.bg_dialog_loading
         }
+
         binding.containerDialog.setBackgroundResource(bgRes)
 
         val textColor = when (dialogType) {
@@ -57,7 +60,9 @@ class YesNoDialog(
             DialogType.RESET -> Color.parseColor("#2AABEE")
             DialogType.LOADING -> Color.parseColor("#AB5BFF")
             DialogType.INTERNET -> Color.parseColor("#FE8700")
+            DialogType.PERMISSION -> Color.parseColor("#AB5BFF")
         }
+
         binding.tvDescription.setTextColor(textColor)
         binding.btnNo.setTextColor(textColor)
 
@@ -65,6 +70,17 @@ class YesNoDialog(
             DialogType.LOADING, DialogType.INTERNET -> {
                 binding.btnNo.gone()
                 (binding.btnYes.layoutParams as LinearLayout.LayoutParams).marginStart = 0
+            }
+            DialogType.PERMISSION -> {
+                // Set custom backgrounds for PERMISSION dialog buttons
+                binding.btnNo.setBackgroundResource(R.drawable.bg_btn_permission_no)
+                binding.btnYes.setBackgroundResource(R.drawable.bg_btn_permission_yes)
+                // Set Yes button text color to white
+                binding.btnYes.setTextColor(Color.parseColor("#FFFFFF"))
+                // Set same padding for both buttons to have equal height
+                val paddingVertical = (9 * context.resources.displayMetrics.density).toInt()
+                binding.btnNo.setPadding(0, paddingVertical, 0, paddingVertical)
+                binding.btnYes.setPadding(0, paddingVertical, 0, paddingVertical)
             }
             else -> {}
         }

@@ -81,6 +81,15 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 }
 
             }
+
+            // Set scaleType based on content type
+            if (viewModel.statusFrom == ValueKey.AVATAR_TYPE) {
+                // For avatars, use fitCenter to show full character without cropping
+                imvImage.scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
+            } else {
+                // For designs, use center to maintain original size
+                imvImage.scaleType = android.widget.ImageView.ScaleType.CENTER
+            }
         }
     }
 

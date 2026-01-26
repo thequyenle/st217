@@ -160,7 +160,7 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
             dialog.dismiss()
             myAlbumActivity.hideNavigation()
             // Exit selection mode when user cancels
-            resetData()
+            //resetData()
         }
         dialog.onYesClick = {
             lifecycleScope.launch(Dispatchers.IO) {

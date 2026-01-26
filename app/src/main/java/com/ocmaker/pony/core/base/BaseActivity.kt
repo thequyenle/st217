@@ -39,6 +39,9 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     open fun initAds() {}
 
+    // Override this to disable background music for specific activities (splash, intro, language, permission)
+    protected open fun shouldPlayBackgroundMusic(): Boolean = true
+
     protected val loadingDialog: WaitingDialog by lazy {
         WaitingDialog(this)
     }
@@ -63,10 +66,12 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         if (!SoundHelper.isSoundNotNull(R.raw.touch)) {
             SoundHelper.loadSound(this, R.raw.touch)
         }
-        // Initialize background music
-        MusicHelper.init(this)
-        if (sharePreference.isMusicEnabled()) {
-            MusicHelper.play()
+        // Initialize background music only if activity should play it
+        if (shouldPlayBackgroundMusic()) {
+            MusicHelper.init(this)
+            if (sharePreference.isMusicEnabled()) {
+                MusicHelper.play()
+            }
         }
         initAds()
         dataObservable()
@@ -78,16 +83,18 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         hideNavigation()
-        // Resume music if enabled
-        if (sharePreference.isMusicEnabled()) {
+        // Resume music if enabled and activity should play it
+        if (shouldPlayBackgroundMusic() && sharePreference.isMusicEnabled()) {
             MusicHelper.play()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        // Pause music when app goes to background
-        MusicHelper.pause()
+        // Pause music when app goes to background (only if this activity plays music)
+        if (shouldPlayBackgroundMusic()) {
+            MusicHelper.pause()
+        }
     }
 
     @SuppressLint("MissingSuperCall", "GestureBackNavigation")

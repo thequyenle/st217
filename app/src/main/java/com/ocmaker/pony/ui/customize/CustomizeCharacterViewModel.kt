@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlin.collections.get
 
 class CustomizeCharacterViewModel : ViewModel() {
     // Đếm số lần random, chỉ số được chọn
@@ -244,8 +245,9 @@ class CustomizeCharacterViewModel : ViewModel() {
         val pathSelected = if (item.listImageColor.isEmpty()) {
             path
         } else {
-            item.listImageColor[positionColorItemList[positionNavSelected]].path
-        }
+// Fix: Ensure color index is within bounds to prevent IndexOutOfBoundsException
+            val colorIndex = positionColorItemList[positionNavSelected].coerceIn(0, item.listImageColor.size - 1)
+            item.listImageColor[colorIndex].path        }
         setIsSelectedItem(positionNavSelected)
         setPathSelected(positionCustom, path)
         setItemNavList(positionNavSelected, position)
@@ -586,9 +588,10 @@ class CustomizeCharacterViewModel : ViewModel() {
                 // Show No Internet dialog
                 val dialog = com.ocmaker.pony.dialog.YesNoDialog(
                     context,
-                    R.string.error,
+                    R.string.no_internet,
                     R.string.please_check_your_internet,
-                    isError = true
+                    isError = true,
+                    dialogType = com.ocmaker.pony.dialog.DialogType.INTERNET
                 )
                 dialog.show()
                 dialog.onYesClick = {

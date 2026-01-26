@@ -31,7 +31,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.facebook.shimmer.ShimmerDrawable
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import com.ocmaker.pony.R
 import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
@@ -77,6 +82,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.get
 import kotlin.getValue
 import kotlin.toString
 
@@ -421,11 +427,15 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             rcvSticker.apply {
                 adapter = stickerAdapter
                 itemAnimator = null
+                setItemViewCacheSize(200)
+                setHasFixedSize(true)
             }
 
             rcvSpeech.apply {
                 adapter = speechAdapter
                 itemAnimator = null
+                setItemViewCacheSize(200)
+                setHasFixedSize(true)
             }
 
             rcvFont.apply {
@@ -457,11 +467,11 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             showLoading()
             viewModel.loadDataDefault(this@AddCharacterActivity)
             viewModel.updatePathDefault(intent.getStringExtra(IntentKey.INTENT_KEY) ?: "")
+            addDrawable(viewModel.pathDefault, true)
 
 
 
             withContext(Dispatchers.Main) {
-                loadCharacter(this@AddCharacterActivity, viewModel.pathDefault, binding.imvCharacter)
 
                 viewModel.setTypeNavigation(ValueKey.BACKGROUND_NAVIGATION)
                 viewModel.setTypeBackground(ValueKey.IMAGE_BACKGROUND)
@@ -485,14 +495,57 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
     }
 
-    private fun addDrawable(path: String, isCharacter: Boolean = false, bitmapText: Bitmap? = null) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val bitmapDefault = if (bitmapText == null) Glide.with(this@AddCharacterActivity).load(path).submit().get()
-                .toBitmap() else bitmapText
-            val drawableEmoji = viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
+    /**
+     * Async bitmap loading using Glide without blocking threads
+     */
+    private suspend fun loadBitmapAsync(path: String): Bitmap = suspendCancellableCoroutine { continuation ->
+        val target = object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                if (continuation.isActive) {
+                    continuation.resume(resource)
+                }
+            }
 
-            withContext(Dispatchers.Main) {
-                drawableEmoji.let { binding.drawView.addDraw(it) }
+            override fun onLoadFailed(errorDrawable: android.graphics.drawable.Drawable?) {
+                if (continuation.isActive) {
+                    continuation.resumeWithException(Exception("Failed to load bitmap from: $path"))
+                }
+            }
+
+            override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
+                // Cleanup if needed
+            }
+        }
+
+        Glide.with(this@AddCharacterActivity)
+            .asBitmap()
+            .load(path)
+            .into(target)
+
+        continuation.invokeOnCancellation {
+            Glide.with(this@AddCharacterActivity).clear(target)
+        }
+    }
+
+    private fun addDrawable(path: String, isCharacter: Boolean = false, bitmapText: Bitmap? = null) {
+        lifecycleScope.launch {
+            try {
+                val bitmapDefault = if (bitmapText == null) {
+                    loadBitmapAsync(path)
+                } else {
+                    bitmapText
+                }
+
+                val drawableEmoji = withContext(Dispatchers.IO) {
+                    viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
+                }
+
+                binding.drawView.addDraw(drawableEmoji)
+            } catch (e: Exception) {
+                Log.e("AddCharacterActivity", "Failed to add drawable: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.save_failed_please_try_again))
+                }
             }
         }
     }
@@ -738,6 +791,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 binding.edtText.setText("")
                 binding.edtText.setFont(viewModel.textFontList.first().color)
                 binding.edtText.setTextColor(viewModel.textColorList[1].color)
+                binding.tvGetText.setTextColor(viewModel.textColorList[1].color) // Thêm dòng này
                 addDrawable(viewModel.pathDefault, true)
                 backgroundImageAdapter.submitList(viewModel.backgroundImageList)
                 backgroundColorAdapter.submitList(viewModel.backgroundColorList)

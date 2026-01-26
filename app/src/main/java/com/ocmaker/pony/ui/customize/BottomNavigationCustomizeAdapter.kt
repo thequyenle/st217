@@ -50,30 +50,30 @@ class BottomNavigationCustomizeAdapter(private val context: Context) :
                 cvContent.resources.displayMetrics
             )
 
+            // Cancel any running animations to prevent jumps when recycling views
+            cvContent.animate().cancel()
 
             if (item.isSelected) {
               //  vFocus.setBackgroundResource(R.drawable.bg_bottom_navi)
                 imvImage.setBackgroundColor(Color.TRANSPARENT)
                 cvContent.strokeColor = Color.TRANSPARENT
                 cvContent.setBackgroundResource(R.drawable.bg_select_navi)
-               // binding.main.setMargins(0, 5.dp(context),8.dp(context), 25.dp(context))
+                // Use consistent margin to avoid layout shift
+                //binding.main.setMargins(0, 5.dp(context), 8.dp(context), 7.dp(context))
 
+                // Use translationY for visual effect without affecting layout
                 cvContent.translationZ = 50f
-                cvContent.animate()
-                    .translationY(-offset)
-                    .setDuration(180)
-                    .start()
+                cvContent.translationY = -offset
 
             } else {
-                binding.main.setMargins(0, 15.dp(context),8.dp(context), 15.dp(context))
+                // Use same bottom margin as selected to maintain consistent height
+                binding.main.setMargins(0, 15.dp(context), 8.dp(context), 15.dp(context))
 
                 //   vFocus.setBackgroundColor(context.getColor(android.R.color.transparent))
                 imvImage.setBackgroundColor(Color.TRANSPARENT)
                 cvContent.setBackgroundResource(R.drawable.bg_uslt_navi)
-                cvContent.animate()
-                    .translationY(0f)
-                    .setDuration(180)
-                    .start()
+                cvContent.translationZ = 0f
+                cvContent.translationY = 0f
             }
 
             loadImage(root, item.imageNavigation, imvImage)

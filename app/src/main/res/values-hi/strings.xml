@@ -15,6 +15,7 @@
     <string name="storage">स्टोरेज</string>
     <string name="continue_per">जारी रखें</string>
     <string name="notification">सूचना</string>
+    <string name="no_internet">इंटरनेट नहीं</string>
     <string name="granted_notification">सूचना अनुमति प्रदान की गई</string>
     <string name="granted_storage">स्टोरेज अनुमति प्रदान की गई</string>
     <string name="allow">अनुमति दें</string>
