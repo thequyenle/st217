@@ -592,7 +592,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         drawList.add(draw)
 
         // save undo khi add xong
-        saveDrawState()
+      //  saveDrawState()
 
         OnDrawListener?.onAddedDraw(draw)
         invalidate()
